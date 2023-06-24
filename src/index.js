@@ -5,7 +5,6 @@ const loader = document.querySelector(".loader");
 const error = document.querySelector(".error");
 const catInfo = document.querySelector(".cat-info");
 
-// Завантаження порід
 const loadBreeds = async () => {
   try {
     const breeds = await fetchBreeds();
@@ -18,7 +17,6 @@ const loadBreeds = async () => {
   }
 };
 
-// Заповнення select порід
 const populateBreedSelect = (breeds) => {
   breeds.forEach((breed) => {
     const option = document.createElement("option");
@@ -29,7 +27,6 @@ const populateBreedSelect = (breeds) => {
   breedSelect.addEventListener("change", handleBreedSelect);
 };
 
-// Обробка вибору породи
 const handleBreedSelect = async () => {
   const breedId = breedSelect.value;
   showElement(loader);
@@ -43,7 +40,6 @@ const handleBreedSelect = async () => {
   }
 };
 
-// Відображення інформації про кота
 const displayCatInfo = (catData) => {
   const cat = catData[0];
   const image = document.createElement("img");
@@ -69,22 +65,18 @@ const displayCatInfo = (catData) => {
   hideElement(loader);
 };
 
-// Показати елемент
 const showElement = (element) => {
   element.style.display = "block";
 };
 
-// Сховати елемент
 const hideElement = (element) => {
   element.style.display = "none";
 };
 
-// Показати повідомлення про помилку
 const showError = () => {
   showElement(error);
 };
 
-// Завантаження порід при завантаженні сторінки
 document.addEventListener("DOMContentLoaded", loadBreeds);
 
   
