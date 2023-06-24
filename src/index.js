@@ -5,6 +5,8 @@ const loader = document.querySelector(".loader");
 const error = document.querySelector(".error");
 const catInfo = document.querySelector(".cat-info");
 
+let currentBreedId = null;
+
 const loadBreeds = async () => {
   try {
     const breeds = await fetchBreeds();
@@ -14,6 +16,7 @@ const loadBreeds = async () => {
   } catch (error) {
     console.error("Error loading cat breeds:", error);
     showError();
+    hideElement(loader);
   }
 };
 
@@ -29,14 +32,21 @@ const populateBreedSelect = (breeds) => {
 
 const handleBreedSelect = async () => {
   const breedId = breedSelect.value;
-  showElement(loader);
-  hideElement(catInfo);
-  try {
-    const catData = await fetchCatByBreed(breedId);
-    displayCatInfo(catData);
-  } catch (error) {
-    console.error("Error loading cat by breed:", error);
-    showError();
+  if (currentBreedId !== breedId) {
+    currentBreedId = breedId;
+    showElement(loader);
+    hideElement(catInfo);
+    hideElement(error);
+    try {
+      const catData = await fetchCatByBreed(breedId);
+      displayCatInfo(catData);
+    } catch (error) {
+      console.error("Error loading cat by breed:", error);
+      showError();
+      hideElement(loader);
+      return;
+    }
+    hideElement(loader);
   }
 };
 
@@ -45,7 +55,7 @@ const displayCatInfo = (catData) => {
   const image = document.createElement("img");
   image.src = cat.url;
   image.alt = "Cat Image";
-  
+
   const breedName = document.createElement("h2");
   breedName.textContent = cat.breeds[0].name;
 
@@ -62,7 +72,6 @@ const displayCatInfo = (catData) => {
   catInfo.appendChild(temperament);
 
   showElement(catInfo);
-  hideElement(loader);
 };
 
 const showElement = (element) => {
